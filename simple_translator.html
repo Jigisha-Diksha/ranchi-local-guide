@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranchi Local Guide Translator - Simple Version</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .result-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e1e8ed;
+            font-size: 16px;
+        }
+
+        .explanation-item {
+            background: white;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b6b;
+            font-size: 14px;
+        }
+
+        .example-section {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #74b9ff;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #0984e3;
+            margin-bottom: 10px;
+        }
+
+        .example-text {
+            font-style: italic;
+            color: #2d3436;
+            cursor: pointer;
+        }
+
+        .example-text:hover {
+            background: rgba(116, 185, 255, 0.1);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .terms-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .terms-section.show {
+            display: block;
+        }
+
+        .term-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .term-name {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .term-translation {
+            color: #666;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ Ranchi Local Guide</h1>
+            <p>Translate local Ranchi slang to English/Hindi</p>
+        </div>
+
+        <div class="main-content">
+            <div class="note">
+                <strong>📝 Note:</strong> This is a simple client-side version. For the full web app with all features, run <code>python start_server.py</code>
+            </div>
+
+            <div class="example-section">
+                <div class="example-title">💡 Try these examples (click to use):</div>
+                <div class="example-text" onclick="useExample(this)">"Arre baba, Litti Chokha khao, bahut acha hai"</div>
+                <div class="example-text" onclick="useExample(this)">"Kaise ho re? Dhuska try kiya hai?"</div>
+                <div class="example-text" onclick="useExample(this)">"Theek ba dada, ghar aa jao"</div>
+            </div>
+
+            <div class="input-group">
+                <label for="inputText">Enter sentence with Ranchi local terms:</label>
+                <textarea 
+                    id="inputText" 
+                    placeholder="Type your sentence here... (e.g., Arre baba, Litti Chokha khao)"
+                    rows="3"
+                ></textarea>
+            </div>
+
+            <button class="btn" onclick="translateText()">🔄 Translate</button>
+            <button class="btn" onclick="showTerms()">📚 View Terms</button>
+            <button class="btn" onclick="clearAll()">🗑️ Clear</button>
+
+            <div class="result-section" id="resultSection">
+                <div class="result-item">
+                    <div class="result-label">📥 Original:</div>
+                    <div class="result-text" id="originalText"></div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">📤 Translated:</div>
+                    <div class="result-text" id="translatedText"></div>
+                </div>
+                
+                <div id="explanations"></div>
+            </div>
+
+            <div class="terms-section" id="termsSection">
+                <h3>📚 Common Ranchi Terms</h3>
+                <div id="termsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple client-side translation dictionary
+        const ranchTerms = {
+            "arre baba": "Hey friend (casual greeting)",
+            "litti chokha": "Traditional dish with roasted wheat balls and mashed vegetables",
+            "dhuska": "Fried rice pancakes, local breakfast item",
+            "bahut acha": "Very good/excellent",
+            "acha hai": "It's good/Nice",
+            "kaise ho re": "How are you? (local informal)",
+            "theek ba": "All good/I'm fine",
+            "ghar aa jao": "Come to my home",
+            "khana khaao": "Have food",
+            "paani piyoo": "Drink water",
+            "rugra": "Mushroom curry, very popular in Ranchi",
+            "pittha": "Steamed rice cakes",
+            "handia": "Traditional rice beer (tribal beverage)",
+            "dada": "Brother (respectful term for elders)",
+            "didi": "Sister (respectful term for elders)",
+            "aaja bhai": "Come here, brother",
+            "main road": "Albert Ekka Chowk/Main Road area",
+            "tharpakhna": "Tharpakhna Lake, popular hangout spot"
+        };
+
+        function translateText() {
+            const inputText = document.getElementById('inputText').value.trim();
+            const resultSection = document.getElementById('resultSection');
+            
+            if (!inputText) {
+                alert('Please enter a sentence to translate');
+                return;
+            }
+
+            const result = findAndTranslateTerms(inputText);
+            displayResult(result);
+        }
+
+        function findAndTranslateTerms(sentence) {
+            const sentenceLower = sentence.toLowerCase();
+            const foundTerms = [];
+            let translatedSentence = sentence;
+
+            // Find terms in the sentence
+            Object.keys(ranchTerms).forEach(term => {
+                if (sentenceLower.includes(term)) {
+                    foundTerms.push({
+                        original: term,
+                        translation: ranchTerms[term]
+                    });
+                    
+                    // Simple replacement for common terms
+                    if (term === "arre baba") {
+                        translatedSentence = translatedSentence.replace(new RegExp(term, 'gi'), "Hey friend");
+                    } else if (term === "bahut acha") {
+                        translatedSentence = translatedSentence.replace(new RegExp(term, 'gi'), "very good");
+                    } else if (term === "theek ba") {
+                        translatedSentence = translatedSentence.replace(new RegExp(term, 'gi'), "I'm fine");
+                    } else if (term === "ghar aa jao") {
+                        translatedSentence = translatedSentence.replace(new RegExp(term, 'gi'), "come to my home");
+                    }
+                }
+            });
+
+            return {
+                original: sentence,
+                translated: translatedSentence,
+                foundTerms: foundTerms,
+                hasTranslations: foundTerms.length > 0
+            };
+        }
+
+        function displayResult(result) {
+            const resultSection = document.getElementById('resultSection');
+            const originalText = document.getElementById('originalText');
+            const translatedText = document.getElementById('translatedText');
+            const explanations = document.getElementById('explanations');
+
+            originalText.textContent = result.original;
+            translatedText.textContent = result.translated;
+
+            // Clear previous explanations
+            explanations.innerHTML = '';
+
+            if (result.hasTranslations) {
+                const explanationsTitle = document.createElement('div');
+                explanationsTitle.className = 'result-label';
+                explanationsTitle.textContent = '🔍 Term Explanations:';
+                explanations.appendChild(explanationsTitle);
+
+                result.foundTerms.forEach(term => {
+                    const explanationItem = document.createElement('div');
+                    explanationItem.className = 'explanation-item';
+                    explanationItem.textContent = `'${term.original}' → ${term.translation}`;
+                    explanations.appendChild(explanationItem);
+                });
+            } else {
+                const noTermsMsg = document.createElement('div');
+                noTermsMsg.className = 'explanation-item';
+                noTermsMsg.textContent = 'ℹ️ No Ranchi local terms found in this sentence.';
+                explanations.appendChild(noTermsMsg);
+            }
+
+            resultSection.classList.add('show');
+        }
+
+        function showTerms() {
+            const termsSection = document.getElementById('termsSection');
+            const termsList = document.getElementById('termsList');
+
+            if (!termsSection.classList.contains('show')) {
+                termsList.innerHTML = '';
+                
+                Object.entries(ranchTerms).forEach(([term, translation]) => {
+                    const termItem = document.createElement('div');
+                    termItem.className = 'term-item';
+                    
+                    const termName = document.createElement('div');
+                    termName.className = 'term-name';
+                    termName.textContent = term.charAt(0).toUpperCase() + term.slice(1);
+                    
+                    const termTranslation = document.createElement('div');
+                    termTranslation.className = 'term-translation';
+                    termTranslation.textContent = translation;
+                    
+                    termItem.appendChild(termName);
+                    termItem.appendChild(termTranslation);
+                    termsList.appendChild(termItem);
+                });
+
+                termsSection.classList.add('show');
+            } else {
+                termsSection.classList.remove('show');
+            }
+        }
+
+        function useExample(element) {
+            const exampleText = element.textContent.replace(/"/g, '');
+            document.getElementById('inputText').value = exampleText;
+            translateText();
+        }
+
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('resultSection').classList.remove('show');
+            document.getElementById('termsSection').classList.remove('show');
+        }
+
+        // Allow Enter key to translate
+        document.getElementById('inputText').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.ctrlKey) {
+                e.preventDefault();
+                translateText();
+            }
+        });
+
+        // Auto-focus on input
+        document.getElementById('inputText').focus();
+    </script>
+</body>
+</html>
