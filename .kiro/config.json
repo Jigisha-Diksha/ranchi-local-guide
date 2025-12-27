@@ -1,0 +1,8 @@
+{
+  "project_name": "ranchi-local-guide",
+  "description": "A translator for local Ranchi slang, food terms, and cultural phrases",
+  "city": "Ranchi",
+  "language": "Hindi/English",
+  "version": "1.0.0",
+  "created_for": "AI For Bharat Hackathon - Kiro Week 5 Challenge"
+}
